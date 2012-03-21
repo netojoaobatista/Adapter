@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Desacoplando as bibliotecas Javascript</title>
+		<link rel="stylesheet" type="text/css" href="css/adapter.css" />
+		<script src="js/JavascriptLibrary.js"></script>
+		
+		<!--
+		Para utilizar a versão Prototype, basta remover o comentário das
+		linhas abaixo, comentar as linhas da biblioteca jQuery e seu adapter e
+		substituir a instância de jQueryT passado na Closure do código para uma
+		instância de PrototypeT.
+		
+		<script src="js/prototype/prototype.js"></script>
+		<script src="js/prototype/PrototypeT.js"></script>
+		-->
+		
+		<script src="js/jquery/jquery.min.js"></script>
+		<script src="js/jquery/jQueryT.js"></script>
+		<script>
+		(function(lib){
+			if (lib instanceof JavascriptLibrary){
+				lib.init(function(){
+					this.query(".dropdown .selection").on("click",function(){
+						this.up().toggle("openned");
+					});
+					this.query(".dropdown .list a").on("click",function(evt){
+						var selector = this.up(3).find(".selection");
+						selector.text(evt.target.innerHTML);
+						selector.fire("click");
+					});
+				});
+			} else {
+				throw "biblioteca inválida";
+			}
+		}(new jQueryT())); //(new PrototypeT()));
+		</script>
+	</head>
+	<body>
+		<div class="dropdown">
+			<a href="#" class="selection">Bibliotecas</a>
+			<ul class="list">
+				<li class="option"><a href="#">Item 1</a></li>
+				<li class="option"><a href="#">Item 2</a></li>
+				<li class="option"><a href="#">Item 3</a></li>
+			</ul>
+		</div>
+	</body>
+</html>
